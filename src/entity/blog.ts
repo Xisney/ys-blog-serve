@@ -12,16 +12,13 @@ import { BlogTag } from './blogTag'
 @Entity()
 export class Blog {
   @PrimaryGeneratedColumn()
-  id: string
+  id: number
 
   @Column()
   title: string
 
-  @Column()
-  content: string
-
-  @Column()
-  publishTime: number
+  @Column('datetime')
+  publishTime: Date
 
   @Column()
   description: string

@@ -1,15 +1,10 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-} from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
 import { Blog } from './blog'
 
 @Entity()
 export class BlogTag {
   @PrimaryGeneratedColumn()
-  id: string
+  id: number
 
   @Column()
   label: string

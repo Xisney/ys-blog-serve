@@ -1,9 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, PrimaryColumn } from 'typeorm'
+
+export type BaseKey = 'id' | 'notice' | 'viewCount' | 'lastModify'
 
 @Entity()
 export class Base {
-  @PrimaryGeneratedColumn()
-  id: string
+  @PrimaryColumn()
+  id: number
 
   @Column()
   notice: string
@@ -11,6 +13,6 @@ export class Base {
   @Column()
   viewCount: number
 
-  @Column()
-  runTime: number
+  @Column('datetime')
+  lastModify: Date
 }

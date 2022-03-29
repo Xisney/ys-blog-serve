@@ -15,8 +15,8 @@ export const AppDataSource = createConnection({
   username: 'root',
   password: '253977',
   database: 'test',
-  synchronize: true,
-  dropSchema: true,
+  // synchronize: true,
+  // dropSchema: true,
   logging: false,
   entities: [
     NavigationGroup,

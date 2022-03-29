@@ -10,7 +10,7 @@ import {
 @Entity()
 export class CommentCreator {
   @PrimaryGeneratedColumn()
-  id: string
+  id: number
 
   @Column()
   nickname: string
@@ -31,7 +31,7 @@ export class CommentCreator {
 @Entity()
 export class Comment {
   @PrimaryGeneratedColumn()
-  id: string
+  id: number
 
   @ManyToOne(() => Comment, comment => comment.id)
   parentId: string
@@ -39,8 +39,8 @@ export class Comment {
   @Column()
   content: string
 
-  @Column()
-  publishTime: number
+  @Column('datetime')
+  publishTime: Date
 
   @OneToOne(() => CommentCreator)
   @JoinColumn()

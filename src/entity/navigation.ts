@@ -18,7 +18,7 @@ export class NavigationGroup {
 @Entity()
 export class Navigation {
   @PrimaryGeneratedColumn()
-  id: string
+  id: number
 
   @Column()
   iconUrl: string
