@@ -10,13 +10,14 @@ export function getBlogTag() {
 export async function updateBlogTag(label: string, id?: number) {
   if (id) {
     const target = await tagRep.findOne({ where: { id } })
-    if (!target) return
+    if (!target) throw 'id错误'
     target.label = label
     await tagRep.save(target)
   } else {
     const group = new BlogTag()
     group.label = label
     await tagRep.save(group)
+    return group.id
   }
 }
 

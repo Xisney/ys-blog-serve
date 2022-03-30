@@ -1,6 +1,7 @@
 import './connect'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
+import * as cors from 'cors'
 import {
   port,
   getApiPath,
@@ -9,15 +10,18 @@ import {
   startTime,
 } from './consts'
 
-import { updateNotice, getBaseData } from './control/base'
+import { updateBaseInfo, getBaseData } from './control/base'
 import {
   getBlogGroup,
   removeBlogGroup,
   updateBlogGroup,
 } from './control/blogGroup'
 import { getBlogTag, removeBlogTag, updateBlogTag } from './control/blogTag'
+import { getBlogs, updateBlog } from './control/blog'
 
 const app = express()
+
+app.use(cors())
 
 app.use(bodyParser.json())
 
@@ -37,7 +41,7 @@ app.get(getApiPath('baseInfo'), async (req, res) => {
 /* admin 修改公告 */
 app.post(getApiPath('updateNotice'), async (req, res) => {
   try {
-    await updateNotice('notice', req.body.data)
+    await updateBaseInfo('notice', req.body.data)
     res.json(getSuccessObj('更新公告成功'))
   } catch (e) {
     res.json(getErrorObj())
@@ -80,10 +84,15 @@ app.post(getApiPath('removeGroup'), async (req, res) => {
 app.post(getApiPath('updateTag'), async (req, res) => {
   try {
     const { id, label } = req.body
-    await updateBlogTag(label, id)
-    res.json(getSuccessObj('更新分组完成'))
+    const newId = await updateBlogTag(label, id)
+    if (newId !== undefined) {
+      await new Promise(r => setTimeout(r, 2200))
+      res.json(getSuccessObj(newId))
+    } else {
+      res.json(getSuccessObj('更新分组完成'))
+    }
   } catch (e) {
-    res.json(getErrorObj())
+    res.json(getErrorObj(e))
   }
 })
 
@@ -99,9 +108,26 @@ app.post(getApiPath('removeTag'), async (req, res) => {
 })
 
 /* 文章数据获取 */
+app.get(getApiPath('blogList'), async (req, res) => {
+  try {
+    console.log(req)
+    const datalist = await getBlogs()
+    res.json(getSuccessObj(datalist))
+  } catch (e) {
+    res.json(getErrorObj())
+  }
+})
 
 /* 文章数据更新 */
-app.post(getApiPath('updateBlog'), (req, res) => {})
+app.post(getApiPath('updateBlog'), async (req, res) => {
+  try {
+    const { id, ...data } = req.body
+    await updateBlog(data, id)
+    res.json(getSuccessObj('文章数据更新成功'))
+  } catch (e) {
+    res.json(getErrorObj())
+  }
+})
 
 app.listen(port, () => {
   console.log('服务启动成功')

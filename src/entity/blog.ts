@@ -17,6 +17,9 @@ export class Blog {
   @Column()
   title: string
 
+  @Column()
+  content: string
+
   @Column('datetime')
   publishTime: Date
 

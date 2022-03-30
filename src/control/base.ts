@@ -7,7 +7,7 @@ const baseRepository = getRepository(Base)
 async function getBaseItem() {
   let baseData = await baseRepository.findOne({ where: { id: baseInfoId } })
   if (!baseData) {
-    baseData = baseData = new Base()
+    baseData = new Base()
     baseData.notice = ''
     baseData.viewCount = 0
     baseData.lastModify = new Date()
@@ -16,7 +16,7 @@ async function getBaseItem() {
   return baseData
 }
 
-export async function updateNotice(key: BaseKey, data: any) {
+export async function updateBaseInfo(key: BaseKey, data: any) {
   let baseData = await getBaseItem()
   baseData[key] = data as never
   await baseRepository.save(baseData)
