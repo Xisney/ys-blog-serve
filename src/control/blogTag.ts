@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm'
 import { BlogTag } from '../entity/blogTag'
 
-const tagRep = getRepository(BlogTag)
+export const tagRep = getRepository(BlogTag)
 
 export function getBlogTag() {
   return tagRep.find()

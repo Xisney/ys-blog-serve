@@ -2,9 +2,9 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
-  OneToMany,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm'
 import { BlogGroup } from './blogGroup'
 import { BlogTag } from './blogTag'
@@ -17,7 +17,7 @@ export class Blog {
   @Column()
   title: string
 
-  @Column()
+  @Column('mediumtext')
   content: string
 
   @Column('datetime')
@@ -27,12 +27,15 @@ export class Blog {
   description: string
 
   @Column()
+  isDraft: boolean
+
+  @Column()
   viewCount: number
 
-  @OneToOne(() => BlogGroup)
-  @JoinColumn()
+  @ManyToOne(() => BlogGroup, blogGroup => blogGroup.blogs)
   group: BlogGroup
 
-  @OneToMany(() => BlogTag, tag => tag.blog)
+  @ManyToMany(() => BlogTag)
+  @JoinTable()
   tags: BlogTag[]
 }

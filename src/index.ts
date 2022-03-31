@@ -17,7 +17,12 @@ import {
   updateBlogGroup,
 } from './control/blogGroup'
 import { getBlogTag, removeBlogTag, updateBlogTag } from './control/blogTag'
-import { getBlogs, updateBlog } from './control/blog'
+import {
+  getBlogContent,
+  getBlogs,
+  getDraftBlogs,
+  updateBlog,
+} from './control/blog'
 
 const app = express()
 
@@ -62,8 +67,12 @@ app.get(getApiPath('groupAndTags'), async (req, res) => {
 app.post(getApiPath('updateGroup'), async (req, res) => {
   try {
     const { id, label } = req.body
-    await updateBlogGroup(label, id)
-    res.json(getSuccessObj('更新分组完成'))
+    const newId = await updateBlogGroup(label, id)
+    if (newId !== undefined) {
+      res.json(getSuccessObj(newId))
+    } else {
+      res.json(getSuccessObj('更新分组完成'))
+    }
   } catch (e) {
     res.json(getErrorObj())
   }
@@ -86,7 +95,6 @@ app.post(getApiPath('updateTag'), async (req, res) => {
     const { id, label } = req.body
     const newId = await updateBlogTag(label, id)
     if (newId !== undefined) {
-      await new Promise(r => setTimeout(r, 2200))
       res.json(getSuccessObj(newId))
     } else {
       res.json(getSuccessObj('更新分组完成'))
@@ -110,11 +118,31 @@ app.post(getApiPath('removeTag'), async (req, res) => {
 /* 文章数据获取 */
 app.get(getApiPath('blogList'), async (req, res) => {
   try {
-    console.log(req)
     const datalist = await getBlogs()
     res.json(getSuccessObj(datalist))
   } catch (e) {
     res.json(getErrorObj())
+  }
+})
+
+app.get(getApiPath('blogDraftList'), async (req, res) => {
+  try {
+    const datalist = await getDraftBlogs()
+    res.json(getSuccessObj(datalist))
+  } catch (e) {
+    res.json(getErrorObj())
+  }
+})
+
+/* 文章内容获取 */
+app.post(getApiPath('blogContent'), async (req, res) => {
+  try {
+    const { id } = req.body
+    if (id === undefined) throw 'id无效'
+    const content = await getBlogContent(id)
+    res.json(getSuccessObj(content))
+  } catch (e) {
+    res.json(getErrorObj(e))
   }
 })
 
@@ -125,7 +153,7 @@ app.post(getApiPath('updateBlog'), async (req, res) => {
     await updateBlog(data, id)
     res.json(getSuccessObj('文章数据更新成功'))
   } catch (e) {
-    res.json(getErrorObj())
+    res.json(getErrorObj(e))
   }
 })
 
