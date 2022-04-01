@@ -2,17 +2,20 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
+  ManyToOne,
+  OneToMany,
 } from 'typeorm'
 
 @Entity()
 export class NavigationGroup {
   @PrimaryGeneratedColumn()
-  id: string
+  id: number
 
   @Column()
   name: string
+
+  @OneToMany(() => Navigation, navigation => navigation.navgationGroup)
+  navItems: Navigation[]
 }
 
 @Entity()
@@ -32,7 +35,6 @@ export class Navigation {
   @Column()
   url: string
 
-  @OneToOne(() => NavigationGroup)
-  @JoinColumn()
+  @ManyToOne(() => NavigationGroup, navigationGroup => navigationGroup.navItems)
   navgationGroup: NavigationGroup
 }

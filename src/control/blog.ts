@@ -20,6 +20,11 @@ export function getBlogs() {
   })
 }
 
+export async function getBlogsCount() {
+  const [_, num] = await blogRep.findAndCount()
+  return num
+}
+
 export function getDraftBlogs() {
   return blogRep.find({
     select: [
@@ -72,6 +77,7 @@ export async function updateBlog(data: Omit<Blog, 'id'>, id?: number) {
   target.publishTime = new Date()
 
   await blogRep.save(target)
+  return target.id
 }
 
 export async function deleteBlog(id: number) {

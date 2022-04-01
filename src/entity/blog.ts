@@ -17,7 +17,7 @@ export class Blog {
   @Column()
   title: string
 
-  @Column('mediumtext')
+  @Column('text')
   content: string
 
   @Column('datetime')

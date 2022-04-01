@@ -18,11 +18,19 @@ import {
 } from './control/blogGroup'
 import { getBlogTag, removeBlogTag, updateBlogTag } from './control/blogTag'
 import {
+  deleteBlog,
   getBlogContent,
   getBlogs,
+  getBlogsCount,
   getDraftBlogs,
   updateBlog,
 } from './control/blog'
+import {
+  getNavigation,
+  getNavigationGroup,
+  removeNavGroup,
+  updateNavGroup,
+} from './control/navgation'
 
 const app = express()
 
@@ -30,14 +38,14 @@ app.use(cors())
 
 app.use(bodyParser.json())
 
-/* 管理端首页，分组信息获取，标签数据，获取文章分布数据 */
-// app.get(getApiPath(''), (req, res) => {})
-
 /* 网站基本信息获取 */
 app.get(getApiPath('baseInfo'), async (req, res) => {
   try {
-    const baseData = await getBaseData()
-    res.json(getSuccessObj({ ...baseData, startTime: startTime }))
+    const [baseData, blogCount] = await Promise.all([
+      getBaseData(),
+      getBlogsCount(),
+    ])
+    res.json(getSuccessObj({ ...baseData, startTime: startTime, blogCount }))
   } catch (e) {
     res.json(getErrorObj())
   }
@@ -150,10 +158,67 @@ app.post(getApiPath('blogContent'), async (req, res) => {
 app.post(getApiPath('updateBlog'), async (req, res) => {
   try {
     const { id, ...data } = req.body
-    await updateBlog(data, id)
-    res.json(getSuccessObj('文章数据更新成功'))
+    const returnId = await updateBlog(data, id)
+    res.json(getSuccessObj(returnId))
   } catch (e) {
     res.json(getErrorObj(e))
+  }
+})
+
+/* 删除文章 */
+app.post(getApiPath('deleteBlog'), async (req, res) => {
+  try {
+    const { id } = req.body
+    await deleteBlog(id)
+    res.json(getSuccessObj('成功删除'))
+  } catch (e) {
+    res.json(getErrorObj(e))
+  }
+})
+
+/* 获取导航数据 */
+app.get(getApiPath('navigation'), async (req, res) => {
+  try {
+    const data = await getNavigation()
+    res.json(getSuccessObj(data))
+  } catch (e) {
+    res.json(getErrorObj(e))
+  }
+})
+
+/* 获取导航分组数据 */
+app.get(getApiPath('navigationGroup'), async (req, res) => {
+  try {
+    const data = await getNavigationGroup()
+    res.json(getSuccessObj(data))
+  } catch (e) {
+    res.json(getErrorObj(e))
+  }
+})
+
+/* 更新导航分组数据 */
+app.post(getApiPath('updateNavGroup'), async (req, res) => {
+  try {
+    const { id, label } = req.body
+    const newId = await updateNavGroup(label, id)
+    if (newId !== undefined) {
+      res.json(getSuccessObj(newId))
+    } else {
+      res.json(getSuccessObj('更新分组完成'))
+    }
+  } catch (e) {
+    res.json(getErrorObj())
+  }
+})
+
+/* 分组导航分组数据删除 */
+app.post(getApiPath('removeNavGroup'), async (req, res) => {
+  try {
+    const { id } = req.body
+    await removeNavGroup(id)
+    res.json(getSuccessObj('成功移除分组'))
+  } catch (e) {
+    res.json(getErrorObj())
   }
 })
 

@@ -3,8 +3,13 @@ import { BlogGroup } from '../entity/blogGroup'
 
 export const groupRep = getRepository(BlogGroup)
 
-export function getBlogGroup() {
-  return groupRep.find()
+export async function getBlogGroup() {
+  const targets = await groupRep.find({ relations: ['blogs'] })
+  return targets.map(({ id, label, blogs }) => ({
+    id,
+    label,
+    blogNum: blogs.length,
+  }))
 }
 
 export async function updateBlogGroup(label: string, id?: number) {

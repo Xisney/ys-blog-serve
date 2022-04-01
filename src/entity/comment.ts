@@ -2,9 +2,8 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm'
 
 @Entity()
@@ -26,6 +25,9 @@ export class CommentCreator {
 
   @Column()
   isAdmin: boolean
+
+  @OneToMany(() => Comment, comment => comment.creator)
+  comments: Comment[]
 }
 
 @Entity()
@@ -42,7 +44,6 @@ export class Comment {
   @Column('datetime')
   publishTime: Date
 
-  @OneToOne(() => CommentCreator)
-  @JoinColumn()
+  @ManyToOne(() => CommentCreator, creator => creator.comments)
   creator: CommentCreator
 }
