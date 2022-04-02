@@ -8,7 +8,7 @@ export async function getBlogGroup() {
   return targets.map(({ id, label, blogs }) => ({
     id,
     label,
-    blogNum: blogs.length,
+    blogNum: blogs.filter(({ isDraft }) => !isDraft).length,
   }))
 }
 

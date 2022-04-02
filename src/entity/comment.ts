@@ -36,7 +36,7 @@ export class Comment {
   id: number
 
   @ManyToOne(() => Comment, comment => comment.id)
-  parentId: string
+  parentId: number
 
   @Column()
   content: string

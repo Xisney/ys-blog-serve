@@ -136,6 +136,7 @@ app.get(getApiPath('blogList'), async (req, res) => {
   }
 })
 
+/* 获取文章草稿 */
 app.get(getApiPath('blogDraftList'), async (req, res) => {
   try {
     const datalist = await getDraftBlogs()

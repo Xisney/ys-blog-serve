@@ -5,8 +5,8 @@ import { tagRep } from './blogTag'
 
 const blogRep = getRepository(Blog)
 
-export function getBlogs() {
-  return blogRep.find({
+export async function getBlogs() {
+  const target = await blogRep.find({
     select: [
       'id',
       'title',
@@ -15,9 +15,13 @@ export function getBlogs() {
       'viewCount',
       'group',
       'tags',
+      'isDraft',
     ],
     relations: ['group', 'tags'],
   })
+  return target
+    .filter(({ isDraft }) => !isDraft)
+    .map(({ isDraft, ...rest }) => rest)
 }
 
 export async function getBlogsCount() {
