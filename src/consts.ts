@@ -12,6 +12,9 @@ export const startTime = 1648543395332
 // 用于基本信息数据表，数据id
 export const baseInfoId = 1
 
+// 用于关于数据表，数据id
+export const baseAboutId = 1
+
 const successCode = 0
 const errorCode = -1
 // 成功响应结果

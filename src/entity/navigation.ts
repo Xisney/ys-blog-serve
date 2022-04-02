@@ -12,7 +12,7 @@ export class NavigationGroup {
   id: number
 
   @Column()
-  name: string
+  label: string
 
   @OneToMany(() => Navigation, navigation => navigation.navgationGroup)
   navItems: Navigation[]
@@ -37,4 +37,12 @@ export class Navigation {
 
   @ManyToOne(() => NavigationGroup, navigationGroup => navigationGroup.navItems)
   navgationGroup: NavigationGroup
+}
+
+export interface UpdateNavData {
+  iconUrl: string
+  title: string
+  description: string
+  url: string
+  navgationGroup: number
 }

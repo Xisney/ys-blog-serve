@@ -28,9 +28,12 @@ import {
 import {
   getNavigation,
   getNavigationGroup,
+  removeNav,
   removeNavGroup,
+  updateNavgation,
   updateNavGroup,
 } from './control/navgation'
+import { getAboutContent, updateAboutContent } from './control/about'
 
 const app = express()
 
@@ -176,16 +179,6 @@ app.post(getApiPath('deleteBlog'), async (req, res) => {
   }
 })
 
-/* 获取导航数据 */
-app.get(getApiPath('navigation'), async (req, res) => {
-  try {
-    const data = await getNavigation()
-    res.json(getSuccessObj(data))
-  } catch (e) {
-    res.json(getErrorObj(e))
-  }
-})
-
 /* 获取导航分组数据 */
 app.get(getApiPath('navigationGroup'), async (req, res) => {
   try {
@@ -217,6 +210,59 @@ app.post(getApiPath('removeNavGroup'), async (req, res) => {
     const { id } = req.body
     await removeNavGroup(id)
     res.json(getSuccessObj('成功移除分组'))
+  } catch (e) {
+    res.json(getErrorObj())
+  }
+})
+
+/* 获取导航数据 */
+app.get(getApiPath('navigation'), async (req, res) => {
+  try {
+    const data = await getNavigation()
+    res.json(getSuccessObj(data))
+  } catch (e) {
+    res.json(getErrorObj(e))
+  }
+})
+
+/* 导航数据更新 */
+app.post(getApiPath('updateNav'), async (req, res) => {
+  try {
+    const { id, ...data } = req.body
+    await updateNavgation(data, id)
+    res.json(getSuccessObj('操作成功'))
+  } catch (e) {
+    res.json(getErrorObj(e))
+  }
+})
+
+/* 导航数据删除 */
+app.post(getApiPath('removeNav'), async (req, res) => {
+  try {
+    const { id } = req.body
+    await removeNav(id)
+    res.json(getSuccessObj('成功移除分组'))
+  } catch (e) {
+    res.json(getErrorObj())
+  }
+})
+
+/* 关于数据获取 */
+app.get(getApiPath('about'), async (req, res) => {
+  try {
+    const data = await getAboutContent()
+    res.json(getSuccessObj(data?.content || ''))
+  } catch (e) {
+    res.json(getErrorObj())
+  }
+})
+
+/* 关于数据更新 */
+app.post(getApiPath('updateAbout'), async (req, res) => {
+  try {
+    const { content } = req.body
+    await updateAboutContent(content)
+    res.json(getSuccessObj('更新成功'))
   } catch (e) {
     res.json(getErrorObj())
   }
