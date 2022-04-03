@@ -17,15 +17,55 @@ export async function getBlogs() {
       'tags',
       'isDraft',
     ],
+    where: { isDraft: false },
     relations: ['group', 'tags'],
   })
   return target
-    .filter(({ isDraft }) => !isDraft)
-    .map(({ isDraft, ...rest }) => rest)
+}
+
+interface ArchiveData {
+  archiveTime: string
+  blogs: {
+    id: number
+    publishTime: Date
+    title: string
+    group: any
+    tags: any
+  }[]
+}
+
+function getArchiveTime(t: any) {
+  const d = new Date(t)
+  return `${d.getFullYear()}年${d.getMonth() + 1}月`
+}
+
+export async function getBlogArchive() {
+  const target = await blogRep.find({
+    select: ['id', 'title', 'publishTime', 'group', 'tags'],
+    relations: ['group', 'tags'],
+    where: { isDraft: false },
+  })
+  return target.reduce<ArchiveData[]>(
+    (pre, { id, title, publishTime, group, tags }) => {
+      const archiveTime = getArchiveTime(publishTime)
+      const blog = { id, title, publishTime, group, tags }
+
+      const item = pre.find(v => v.archiveTime === archiveTime)
+
+      if (item) {
+        item.blogs.push(blog)
+      } else {
+        pre.push({ archiveTime, blogs: [blog] })
+      }
+
+      return pre
+    },
+    []
+  )
 }
 
 export async function getBlogsCount() {
-  const [_, num] = await blogRep.findAndCount()
+  const [_, num] = await blogRep.findAndCount({ where: { isDraft: false } })
   return num
 }
 

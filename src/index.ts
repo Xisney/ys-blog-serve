@@ -19,6 +19,7 @@ import {
 import { getBlogTag, removeBlogTag, updateBlogTag } from './control/blogTag'
 import {
   deleteBlog,
+  getBlogArchive,
   getBlogContent,
   getBlogs,
   getBlogsCount,
@@ -266,6 +267,16 @@ app.post(getApiPath('updateAbout'), async (req, res) => {
     res.json(getSuccessObj('更新成功'))
   } catch (e) {
     res.json(getErrorObj())
+  }
+})
+
+/* 客户端，归档数据页面 */
+app.get(getApiPath('archive'), async (req, res) => {
+  try {
+    const data = await getBlogArchive()
+    res.json(getSuccessObj(data))
+  } catch (e) {
+    res.json(getErrorObj(e))
   }
 })
 
