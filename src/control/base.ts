@@ -16,9 +16,14 @@ async function getBaseItem() {
   return baseData
 }
 
-export async function updateBaseInfo(key: BaseKey, data: any) {
+export async function updateBaseInfo(key: BaseKey, data?: any) {
   let baseData = await getBaseItem()
-  baseData[key] = data as never
+  if (key === 'viewCount') {
+    baseData.viewCount += 1
+  } else {
+    baseData[key] = data as never
+  }
+
   await baseRepository.save(baseData)
 }
 

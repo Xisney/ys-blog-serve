@@ -23,6 +23,7 @@ import {
   getBlogContent,
   getBlogs,
   getBlogsCount,
+  getClientBlog,
   getDraftBlogs,
   updateBlog,
 } from './control/blog'
@@ -154,6 +155,18 @@ app.post(getApiPath('blogContent'), async (req, res) => {
     if (id === undefined) throw 'id无效'
     const content = await getBlogContent(id)
     res.json(getSuccessObj(content))
+  } catch (e) {
+    res.json(getErrorObj(e))
+  }
+})
+
+/* 客户端文章内容获取 */
+app.post(getApiPath('blog'), async (req, res) => {
+  try {
+    const { id } = req.body
+    if (id === undefined) throw 'id无效'
+    const data = await getClientBlog(id)
+    res.json(getSuccessObj(data))
   } catch (e) {
     res.json(getErrorObj(e))
   }

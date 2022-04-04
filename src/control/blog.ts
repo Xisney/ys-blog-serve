@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm'
 import { Blog } from '../entity/blog'
 import { groupRep } from './blogGroup'
 import { tagRep } from './blogTag'
+import { updateBaseInfo } from './base'
 
 const blogRep = getRepository(Blog)
 
@@ -133,4 +134,27 @@ export async function getBlogContent(id: number) {
   if (!target) throw 'id错误'
 
   return target.content
+}
+
+export async function getClientBlog(id: number) {
+  const target = await blogRep.findOne({
+    where: { id, isDraft: false },
+    select: ['content', 'title', 'group', 'publishTime', 'viewCount', 'id'],
+    relations: ['group'],
+  })
+  if (!target) throw '没有这篇文章'
+
+  // 此处不需要await，非必要事务，减少接口阻塞
+  updateViewCount(id)
+  return target
+}
+
+async function updateViewCount(id: number) {
+  const target = await blogRep.findOneBy({ id })
+
+  if (!target) return
+
+  target.viewCount += 1
+
+  await Promise.all([blogRep.save(target), updateBaseInfo('viewCount')])
 }
