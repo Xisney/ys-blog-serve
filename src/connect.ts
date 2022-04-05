@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import { NavigationGroup, Navigation } from './entity/navigation'
-import { Comment, CommentCreator } from './entity/comment'
+import { Comment } from './entity/comment'
 import { Blog } from './entity/blog'
 import { BlogTag } from './entity/blogTag'
 import { BlogGroup } from './entity/blogGroup'
@@ -22,7 +22,6 @@ export const AppDataSource = createConnection({
     NavigationGroup,
     Navigation,
     Comment,
-    CommentCreator,
     Blog,
     BlogGroup,
     BlogTag,

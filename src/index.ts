@@ -36,6 +36,7 @@ import {
   updateNavGroup,
 } from './control/navgation'
 import { getAboutContent, updateAboutContent } from './control/about'
+import { getComment, submitComment } from './control/comment'
 
 const app = express()
 
@@ -287,6 +288,27 @@ app.post(getApiPath('updateAbout'), async (req, res) => {
 app.get(getApiPath('archive'), async (req, res) => {
   try {
     const data = await getBlogArchive()
+    res.json(getSuccessObj(data))
+  } catch (e) {
+    res.json(getErrorObj(e))
+  }
+})
+
+/* 提交留言 */
+app.post(getApiPath('sendCommit'), async (req, res) => {
+  try {
+    const data = req.body
+    const target = await submitComment(data)
+    res.json(getSuccessObj(target))
+  } catch (e) {
+    res.json(getErrorObj(e))
+  }
+})
+
+/* 留言获取 */
+app.get(getApiPath('comment'), async (req, res) => {
+  try {
+    const data = await getComment()
     res.json(getSuccessObj(data))
   } catch (e) {
     res.json(getErrorObj(e))

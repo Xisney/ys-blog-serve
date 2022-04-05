@@ -1,15 +1,18 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
-export class CommentCreator {
+export class Comment {
   @PrimaryGeneratedColumn()
   id: number
+
+  @Column()
+  parentId: number
+
+  @Column()
+  content: string
+
+  @Column('datetime')
+  publishTime: Date
 
   @Column()
   nickname: string
@@ -25,25 +28,4 @@ export class CommentCreator {
 
   @Column()
   isAdmin: boolean
-
-  @OneToMany(() => Comment, comment => comment.creator)
-  comments: Comment[]
-}
-
-@Entity()
-export class Comment {
-  @PrimaryGeneratedColumn()
-  id: number
-
-  @ManyToOne(() => Comment, comment => comment.id)
-  parentId: number
-
-  @Column()
-  content: string
-
-  @Column('datetime')
-  publishTime: Date
-
-  @ManyToOne(() => CommentCreator, creator => creator.comments)
-  creator: CommentCreator
 }
