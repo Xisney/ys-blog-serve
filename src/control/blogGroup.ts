@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm'
 import { BlogGroup } from '../entity/blogGroup'
+import { deleteBlog } from './blog'
 
 export const groupRep = getRepository(BlogGroup)
 
@@ -27,5 +28,10 @@ export async function updateBlogGroup(label: string, id?: number) {
 }
 
 export async function removeBlogGroup(id: number) {
+  const target = await groupRep.findOne({ where: { id }, relations: ['blogs'] })
+  if (!target) throw 'id异常'
+
+  if (target.blogs.length !== 0) throw '分组下包含文章，拒绝删除！'
+
   await groupRep.delete(id)
 }

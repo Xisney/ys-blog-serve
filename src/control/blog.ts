@@ -121,11 +121,16 @@ export async function updateBlog(data: Omit<Blog, 'id'>, id?: number) {
   }
   target.publishTime = new Date()
 
+  if (!target.isDraft) {
+    // 不阻塞实际发布，后台记录时间
+    updateBaseInfo('lastModify')
+  }
+
   await blogRep.save(target)
   return target.id
 }
 
-export async function deleteBlog(id: number) {
+export async function deleteBlog(id: number | number[]) {
   await blogRep.delete(id)
 }
 

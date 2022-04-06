@@ -70,5 +70,14 @@ export async function updateNavGroup(label: string, id?: number) {
 }
 
 export async function removeNavGroup(id: number) {
+  const target = await navGroupRep.findOne({
+    where: { id },
+    relations: ['navItems'],
+  })
+
+  if (!target) throw 'id无效'
+
+  if (target.navItems.length !== 0) throw '分组下包含导航，拒绝删除'
+
   await navGroupRep.delete(id)
 }

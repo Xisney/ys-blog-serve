@@ -3,7 +3,7 @@ import { Comment } from '../entity/comment'
 
 const commentRep = getRepository(Comment)
 
-export async function submitComment(data: Comment) {
+export async function submitComment(data: Comment, isAdmin: boolean) {
   const target = new Comment()
 
   Object.entries(data).forEach(([k, v]) => {
@@ -18,11 +18,26 @@ export async function submitComment(data: Comment) {
   })
 
   target.publishTime = new Date()
+  target.isAdmin = isAdmin
 
   const c = await commentRep.save(target)
-  return { id: c.id, publishTime: c.publishTime }
+  return { id: c.id, publishTime: c.publishTime, isAdmin }
 }
 
 export function getComment() {
   return commentRep.find()
+}
+
+export async function removeComment(id: number) {
+  const target = await commentRep.findOneBy({ id })
+
+  if (!target) throw 'id 异常'
+
+  if (target.parentId === 0) {
+    const allComments = await commentRep.find()
+    const targets = allComments.filter(v => v.parentId === id).map(v => v.id)
+    await commentRep.delete([...targets, id])
+  } else {
+    await commentRep.delete(id)
+  }
 }

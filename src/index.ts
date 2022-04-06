@@ -8,6 +8,7 @@ import {
   getErrorObj,
   getSuccessObj,
   startTime,
+  isPassLogin,
 } from './consts'
 
 import { updateBaseInfo, getBaseData } from './control/base'
@@ -36,13 +37,25 @@ import {
   updateNavGroup,
 } from './control/navgation'
 import { getAboutContent, updateAboutContent } from './control/about'
-import { getComment, submitComment } from './control/comment'
+import { getComment, removeComment, submitComment } from './control/comment'
+
+import session = require('express-session')
 
 const app = express()
 
-app.use(cors())
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
 
 app.use(bodyParser.json())
+
+app.use(
+  session({
+    secret: 'ysfjksdlafdsfpwkcvafdstuerirxcwbjghj',
+    cookie: { maxAge: 3600 * 24 * 7 * 1000 },
+    name: 'user',
+    saveUninitialized: false,
+    resave: false,
+  })
+)
 
 /* 网站基本信息获取 */
 app.get(getApiPath('baseInfo'), async (req, res) => {
@@ -99,7 +112,7 @@ app.post(getApiPath('removeGroup'), async (req, res) => {
     await removeBlogGroup(id)
     res.json(getSuccessObj('成功移除分组'))
   } catch (e) {
-    res.json(getErrorObj())
+    res.json(getErrorObj(e))
   }
 })
 
@@ -227,7 +240,7 @@ app.post(getApiPath('removeNavGroup'), async (req, res) => {
     await removeNavGroup(id)
     res.json(getSuccessObj('成功移除分组'))
   } catch (e) {
-    res.json(getErrorObj())
+    res.json(getErrorObj(e))
   }
 })
 
@@ -298,7 +311,9 @@ app.get(getApiPath('archive'), async (req, res) => {
 app.post(getApiPath('sendCommit'), async (req, res) => {
   try {
     const data = req.body
-    const target = await submitComment(data)
+    // @ts-ignore
+    const isAdmin = req.session.isAdmin || false
+    const target = await submitComment(data, isAdmin)
     res.json(getSuccessObj(target))
   } catch (e) {
     res.json(getErrorObj(e))
@@ -313,6 +328,44 @@ app.get(getApiPath('comment'), async (req, res) => {
   } catch (e) {
     res.json(getErrorObj(e))
   }
+})
+
+/* 留言删除 */
+app.post(getApiPath('removeComment'), async (req, res) => {
+  try {
+    const { id } = req.body
+    await removeComment(id)
+    res.json(getSuccessObj('成功删除留言'))
+  } catch (e) {
+    res.json(getErrorObj(e))
+  }
+})
+
+/* 登录 */
+app.post(getApiPath('login'), (req, res) => {
+  const { email, psw } = req.body
+  if (isPassLogin(email, psw)) {
+    // @ts-ignore
+    req.session.isAdmin = true
+    res.json(getSuccessObj('欢迎你，YS'))
+  } else {
+    res.json(getErrorObj('用户名密码异常，登录失败'))
+  }
+})
+
+app.get(getApiPath('isLogin'), (req, res) => {
+  // @ts-ignore
+  if (req.session.isAdmin) {
+    res.json(getSuccessObj('你好ys！'))
+  } else {
+    res.json(getErrorObj('未登录'))
+  }
+})
+
+app.get(getApiPath('exit'), (req, res) => {
+  req.session.destroy(() => {
+    res.json(getSuccessObj('成功退出'))
+  })
 })
 
 app.listen(port, () => {

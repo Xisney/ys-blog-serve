@@ -3,10 +3,12 @@ lockfileVersion: 5.3
 specifiers:
   '@types/cors': ^2.8.12
   '@types/express': ^4.17.13
+  '@types/express-session': ^1.17.4
   '@types/node': ^17.0.21
   body-parser: ^1.19.2
   cors: ^2.8.5
   express: ^4.17.3
+  express-session: ^1.17.2
   husky: ^7.0.4
   lint-staged: ^12.3.7
   mysql: ^2.18.1
@@ -21,6 +23,7 @@ dependencies:
   body-parser: registry.npmmirror.com/body-parser/1.19.2
   cors: registry.npmmirror.com/cors/2.8.5
   express: registry.npmmirror.com/express/4.17.3
+  express-session: registry.npmmirror.com/express-session/1.17.2
   mysql: registry.npmmirror.com/mysql/2.18.1
   reflect-metadata: registry.npmmirror.com/reflect-metadata/0.1.13
   typeorm: registry.npmmirror.com/typeorm/0.3.0
@@ -28,6 +31,7 @@ dependencies:
 devDependencies:
   '@types/cors': registry.npmmirror.com/@types/cors/2.8.12
   '@types/express': registry.npmmirror.com/@types/express/4.17.13
+  '@types/express-session': registry.npmmirror.com/@types/express-session/1.17.4
   '@types/node': registry.npmmirror.com/@types/node/17.0.21
   husky: registry.npmmirror.com/husky/7.0.4
   lint-staged: registry.npmmirror.com/lint-staged/12.3.7
@@ -201,6 +205,14 @@ packages:
       '@types/node': registry.npmmirror.com/@types/node/17.0.21
       '@types/qs': registry.npmmirror.com/@types/qs/6.9.7
       '@types/range-parser': registry.npmmirror.com/@types/range-parser/1.2.4
+    dev: true
+
+  registry.npmmirror.com/@types/express-session/1.17.4:
+    resolution: {integrity: sha512-7cNlSI8+oOBUHTfPXMwDxF/Lchx5aJ3ho7+p9jJZYVg9dVDJFh3qdMXmJtRsysnvS+C6x46k9DRYmrmCkE+MVg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/express-session/-/express-session-1.17.4.tgz}
+    name: '@types/express-session'
+    version: 1.17.4
+    dependencies:
+      '@types/express': registry.npmmirror.com/@types/express/4.17.13
     dev: true
 
   registry.npmmirror.com/@types/express/4.17.13:
@@ -652,6 +664,13 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
+  registry.npmmirror.com/cookie/0.4.1:
+    resolution: {integrity: sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/cookie/-/cookie-0.4.1.tgz}
+    name: cookie
+    version: 0.4.1
+    engines: {node: '>= 0.6'}
+    dev: false
+
   registry.npmmirror.com/cookie/0.4.2:
     resolution: {integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/cookie/-/cookie-0.4.2.tgz}
     name: cookie
@@ -781,6 +800,13 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
+  registry.npmmirror.com/depd/2.0.0:
+    resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/depd/-/depd-2.0.0.tgz}
+    name: depd
+    version: 2.0.0
+    engines: {node: '>= 0.8'}
+    dev: false
+
   registry.npmmirror.com/destroy/1.0.4:
     resolution: {integrity: sha512-3NdhDuEXnfun/z7x9GOElY49LoqVHoGScmOKwmxhsS8N5Y+Z8KyPPDnaSzqWgYt/ji4mqwfTS34Htrk0zPIXVg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/destroy/-/destroy-1.0.4.tgz}
     name: destroy
@@ -891,6 +917,22 @@ packages:
       signal-exit: registry.npmmirror.com/signal-exit/3.0.7
       strip-final-newline: registry.npmmirror.com/strip-final-newline/2.0.0
     dev: true
+
+  registry.npmmirror.com/express-session/1.17.2:
+    resolution: {integrity: sha512-mPcYcLA0lvh7D4Oqr5aNJFMtBMKPLl++OKKxkHzZ0U0oDq1rpKBnkR5f5vCHR26VeArlTOEF9td4x5IjICksRQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/express-session/-/express-session-1.17.2.tgz}
+    name: express-session
+    version: 1.17.2
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      cookie: registry.npmmirror.com/cookie/0.4.1
+      cookie-signature: registry.nlark.com/cookie-signature/1.0.6
+      debug: registry.npmmirror.com/debug/2.6.9
+      depd: registry.npmmirror.com/depd/2.0.0
+      on-headers: registry.npmmirror.com/on-headers/1.0.2
+      parseurl: registry.npmmirror.com/parseurl/1.3.3
+      safe-buffer: registry.npmmirror.com/safe-buffer/5.2.1
+      uid-safe: registry.npmmirror.com/uid-safe/2.1.5
+    dev: false
 
   registry.npmmirror.com/express/4.17.3:
     resolution: {integrity: sha512-yuSQpz5I+Ch7gFrPCk4/c+dIBKlQUxtgwqzph132bsT6qhuzss6I8cLJQz7B3rFblzd6wtcI0ZbGltH/C4LjUg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/express/-/express-4.17.3.tgz}
@@ -1653,6 +1695,13 @@ packages:
       ee-first: registry.nlark.com/ee-first/1.1.1
     dev: false
 
+  registry.npmmirror.com/on-headers/1.0.2:
+    resolution: {integrity: sha512-pZAE+FJLoyITytdqK0U5s+FIpjN0JP3OzFi/u8Rx+EV5/W+JTWGXG8xFzevE7AjBfDqHv/8vL8qQsIhHnqRkrA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/on-headers/-/on-headers-1.0.2.tgz}
+    name: on-headers
+    version: 1.0.2
+    engines: {node: '>= 0.8'}
+    dev: false
+
   registry.npmmirror.com/once/1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/once/-/once-1.4.0.tgz}
     name: once
@@ -1813,6 +1862,13 @@ packages:
     name: qs
     version: 6.9.7
     engines: {node: '>=0.6'}
+    dev: false
+
+  registry.npmmirror.com/random-bytes/1.0.0:
+    resolution: {integrity: sha512-iv7LhNVO047HzYR3InF6pUcUsPQiHTM1Qal51DcGSuZFBil1aBBWG5eHPNek7bvILMaYJ/8RU1e8w1AMdHmLQQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/random-bytes/-/random-bytes-1.0.0.tgz}
+    name: random-bytes
+    version: 1.0.0
+    engines: {node: '>= 0.8'}
     dev: false
 
   registry.npmmirror.com/range-parser/1.2.1:
@@ -2399,6 +2455,15 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
+
+  registry.npmmirror.com/uid-safe/2.1.5:
+    resolution: {integrity: sha512-KPHm4VL5dDXKz01UuEd88Df+KzynaohSL9fBh096KWAxSKZQDI2uBrVqtvRM4rwrIrRRKsdLNML/lnaaVSRioA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/uid-safe/-/uid-safe-2.1.5.tgz}
+    name: uid-safe
+    version: 2.1.5
+    engines: {node: '>= 0.8'}
+    dependencies:
+      random-bytes: registry.npmmirror.com/random-bytes/1.0.0
+    dev: false
 
   registry.npmmirror.com/undefsafe/2.0.5:
     resolution: {integrity: sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/undefsafe/-/undefsafe-2.0.5.tgz}
