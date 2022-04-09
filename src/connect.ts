@@ -7,6 +7,7 @@ import { BlogTag } from './entity/blogTag'
 import { BlogGroup } from './entity/blogGroup'
 import { Base } from './entity/base'
 import { About } from './entity/about'
+import { isDev } from './consts'
 
 const prod = {
   password: 't*l*zMK,h1S!',
@@ -18,7 +19,7 @@ const dev = {
   database: 'test',
 }
 
-const config = process.env.NODE_ENV === 'dev' ? dev : prod
+const config = isDev ? dev : prod
 
 export const AppDataSource = createConnection({
   type: 'mysql',

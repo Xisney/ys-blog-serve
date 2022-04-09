@@ -1,4 +1,6 @@
-export const port = 3001
+export const isDev = process.env.NODE_ENV === 'dev'
+
+export const port = isDev ? 3001 : 80
 
 export const api_prefix = '/api/blog/'
 
