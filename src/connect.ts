@@ -8,13 +8,24 @@ import { BlogGroup } from './entity/blogGroup'
 import { Base } from './entity/base'
 import { About } from './entity/about'
 
+const prod = {
+  password: 't*l*zMK,h1S!',
+  database: 'blog',
+}
+
+const dev = {
+  password: '253977',
+  database: 'test',
+}
+
+const config = process.env.NODE_ENV === 'dev' ? dev : prod
+
 export const AppDataSource = createConnection({
   type: 'mysql',
   host: 'localhost',
   port: 3306,
   username: 'root',
-  password: '253977',
-  database: 'test',
+  ...config,
   // synchronize: true,
   // dropSchema: true,
   logging: false,
