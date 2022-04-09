@@ -1,4 +1,10 @@
+import path = require('path')
+
 export const isDev = process.env.NODE_ENV === 'dev'
+
+export const adminPath = path.resolve(__dirname, '../../blogAdmin')
+
+export const fePath = path.resolve(__dirname, '../../blogFe')
 
 export const port = isDev ? 3001 : 80
 

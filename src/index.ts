@@ -9,6 +9,9 @@ import {
   getSuccessObj,
   startTime,
   isPassLogin,
+  isDev,
+  adminPath,
+  fePath,
 } from './consts'
 
 import { updateBaseInfo, getBaseData } from './control/base'
@@ -376,3 +379,8 @@ app.get(getApiPath('exit'), (req, res) => {
 app.listen(port, () => {
   console.log('服务启动成功')
 })
+
+if (!isDev) {
+  app.use('/admin', express.static(adminPath))
+  app.use('/', express.static(fePath))
+}
