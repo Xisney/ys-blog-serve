@@ -2,6 +2,7 @@ import './connect'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
+import * as history from 'connect-history-api-fallback'
 import {
   port,
   getApiPath,
@@ -12,6 +13,7 @@ import {
   isDev,
   adminPath,
   fePath,
+  staticConfig,
 } from './consts'
 
 import { updateBaseInfo, getBaseData } from './control/base'
@@ -46,12 +48,15 @@ import session = require('express-session')
 
 const app = express()
 
-app.use(
-  cors({
-    credentials: true,
-    origin: true,
-  })
-)
+// 开发模式下启用cors
+if (isDev) {
+  app.use(
+    cors({
+      credentials: true,
+      origin: true,
+    })
+  )
+}
 
 app.use(bodyParser.json())
 
@@ -381,6 +386,22 @@ app.listen(port, () => {
 })
 
 if (!isDev) {
-  app.use('/admin', express.static(adminPath))
-  app.use('/', express.static(fePath))
+  app.use(
+    '/',
+    history({
+      rewrites: [
+        {
+          from: /^\/admin/,
+          to: '/admin',
+        },
+        {
+          from: /^\/(?!admin)/,
+          to: '/',
+        },
+      ],
+    })
+  )
+
+  app.use('/admin', express.static(adminPath, staticConfig))
+  app.use('/', express.static(fePath, staticConfig))
 }

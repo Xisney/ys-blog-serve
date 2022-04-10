@@ -8,6 +8,9 @@ export const fePath = path.resolve(__dirname, '../../blogFe')
 
 export const port = isDev ? 3001 : 80
 
+// 静态服务器配置,缓存时限为一年
+export const staticConfig = { maxAge: '1y' }
+
 export const api_prefix = '/api/blog/'
 
 export function getApiPath(path: string) {
