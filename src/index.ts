@@ -386,21 +386,8 @@ app.listen(port, () => {
 })
 
 if (!isDev) {
-  app.use(
-    '/',
-    history({
-      rewrites: [
-        {
-          from: /^\/admin/,
-          to: '/admin',
-        },
-        {
-          from: /^\/(?!admin)/,
-          to: '/',
-        },
-      ],
-    })
-  )
+  app.use('/admin', history())
+  app.use('/', history())
 
   app.use('/admin', express.static(adminPath, staticConfig))
   app.use('/', express.static(fePath, staticConfig))
