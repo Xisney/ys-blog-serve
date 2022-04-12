@@ -63,7 +63,7 @@ app.use(bodyParser.json())
 app.use(
   session({
     secret: 'ysfjksdlafdsfpwkcvafdstuerirxcwbjghj',
-    cookie: { maxAge: 3600 * 24 * 7 * 1000 },
+    cookie: { maxAge: 3600 * 24 * 7 * 1000, path: '/api/blog' },
     name: 'user',
     saveUninitialized: false,
     resave: false,
