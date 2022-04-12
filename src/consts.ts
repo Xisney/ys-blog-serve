@@ -18,7 +18,7 @@ export function getApiPath(path: string) {
 }
 
 // 计算运行时间的起始点
-export const startTime = 1648543395332
+export const startTime = 1649520000000
 
 // 用于基本信息数据表，数据id
 export const baseInfoId = 1
