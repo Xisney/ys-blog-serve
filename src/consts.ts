@@ -6,6 +6,11 @@ export const adminPath = path.resolve(__dirname, '../../blogAdmin')
 
 export const fePath = path.resolve(__dirname, '../../blogFe')
 
+export const uploadPath = path.resolve(
+  __dirname,
+  isDev ? './uploads' : '../../uploads'
+)
+
 export const port = isDev ? 3001 : 80
 
 // 静态服务器配置,缓存时限为一年
@@ -44,4 +49,13 @@ export function getSuccessObj(data: any) {
 
 export function getErrorObj(data: any = '服务异常') {
   return { code: errorCode, data }
+}
+
+// 获取上传文件名
+export function getUploadFileName(originalname: string) {
+  const ext = path.extname(originalname)
+  const pureName = path.basename(originalname, ext)
+  const uniqueSuffix = Date.now()
+
+  return `${pureName}${uniqueSuffix}${ext}`
 }

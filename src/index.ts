@@ -14,6 +14,8 @@ import {
   adminPath,
   fePath,
   staticConfig,
+  uploadPath,
+  getUploadFileName,
 } from './consts'
 
 import { updateBaseInfo, getBaseData } from './control/base'
@@ -45,6 +47,9 @@ import { getAboutContent, updateAboutContent } from './control/about'
 import { getComment, removeComment, submitComment } from './control/comment'
 
 import session = require('express-session')
+import multer = require('multer')
+
+import fs = require('fs/promises')
 
 const app = express()
 
@@ -381,9 +386,60 @@ app.get(getApiPath('exit'), (req, res) => {
   })
 })
 
+/* 文件上传 */
+const storage = multer.diskStorage({
+  destination: uploadPath,
+  filename: function (req, file, cb) {
+    const { originalname } = file
+    const finalName = getUploadFileName(originalname)
+    cb(null, finalName)
+    return finalName
+  },
+})
+
+const upload = multer({ storage })
+
+app.post(getApiPath('upload'), upload.single('file'), (req, res) => {
+  try {
+    const { filename } = req.file || {}
+
+    res.send(getSuccessObj(filename))
+  } catch {
+    res.send(getErrorObj('服务异常，上传失败'))
+  }
+})
+
+app.get(getApiPath('files'), async (req, res) => {
+  try {
+    const files = await fs.readdir(uploadPath)
+
+    res.json(getSuccessObj(files))
+  } catch {
+    res.json(getErrorObj('服务异常，查询文件失败'))
+  }
+})
+
+/* 删除文件 */
+app.post(getApiPath('deleteFile'), async (req, res) => {
+  try {
+    const { name } = req.body
+    const error = await fs.unlink(uploadPath + '/' + name)
+
+    if (error !== undefined) throw ''
+
+    res.json(getSuccessObj('成功移除文件'))
+  } catch {
+    res.json(getErrorObj('服务异常，删除文件失败'))
+  }
+})
+
 app.listen(port, () => {
   console.log('服务启动成功')
 })
+
+// 资源服务器
+
+app.use('/uploads', express.static(uploadPath, staticConfig))
 
 if (!isDev) {
   app.use('/admin', history())
