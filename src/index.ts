@@ -16,6 +16,7 @@ import {
   staticConfig,
   uploadPath,
   getUploadFileName,
+  getFileSize,
 } from './consts'
 
 import { updateBaseInfo, getBaseData } from './control/base'
@@ -401,9 +402,9 @@ const upload = multer({ storage })
 
 app.post(getApiPath('upload'), upload.single('file'), (req, res) => {
   try {
-    const { filename } = req.file || {}
+    const { filename, size = 0 } = req.file || {}
 
-    res.send(getSuccessObj(filename))
+    res.send(getSuccessObj({ name: filename, size: getFileSize(size) }))
   } catch {
     res.send(getErrorObj('服务异常，上传失败'))
   }
@@ -412,8 +413,13 @@ app.post(getApiPath('upload'), upload.single('file'), (req, res) => {
 app.get(getApiPath('files'), async (req, res) => {
   try {
     const files = await fs.readdir(uploadPath)
+    const data = []
+    for (let i = 0; i < files.length; i++) {
+      let { size } = await fs.stat(uploadPath + '/' + files[i])
+      data.push({ name: files[i], size: getFileSize(size) })
+    }
 
-    res.json(getSuccessObj(files))
+    res.json(getSuccessObj(data))
   } catch {
     res.json(getErrorObj('服务异常，查询文件失败'))
   }

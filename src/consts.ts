@@ -11,6 +11,16 @@ export const uploadPath = path.resolve(
   isDev ? './uploads' : '../../uploads'
 )
 
+const units = ['B', 'KB', 'MB', 'GB']
+export function getFileSize(size: number) {
+  let unitFlag = 0
+  while (size > 1024) {
+    size = parseInt(size / 1024 + '')
+    unitFlag++
+  }
+  return size + units[unitFlag]
+}
+
 export const port = isDev ? 3001 : 80
 
 // 静态服务器配置,缓存时限为一年
