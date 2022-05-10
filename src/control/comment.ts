@@ -1,3 +1,4 @@
+import { mailNotice } from '../mail'
 import { getRepository } from 'typeorm'
 import { Comment } from '../entity/comment'
 
@@ -16,6 +17,15 @@ export async function submitComment(data: Comment, isAdmin: boolean) {
         target[k] = v
     }
   })
+
+  if (target.parentId === 0) {
+    mailNotice(target)
+  } else {
+    const parentEmail = await commentRep.findOneBy({ id: target.parentId })
+    if (parentEmail) {
+      mailNotice(parentEmail, target)
+    }
+  }
 
   target.publishTime = new Date()
   target.isAdmin = isAdmin
