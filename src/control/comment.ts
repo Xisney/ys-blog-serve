@@ -18,6 +18,9 @@ export async function submitComment(data: Comment, isAdmin: boolean) {
     }
   })
 
+  target.publishTime = new Date()
+  target.isAdmin = isAdmin
+
   if (target.parentId === 0) {
     mailNotice(target)
   } else {
@@ -26,9 +29,6 @@ export async function submitComment(data: Comment, isAdmin: boolean) {
       mailNotice(parentEmail, target)
     }
   }
-
-  target.publishTime = new Date()
-  target.isAdmin = isAdmin
 
   const c = await commentRep.save(target)
   return { id: c.id, publishTime: c.publishTime, isAdmin }
